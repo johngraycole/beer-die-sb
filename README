@@ -1,0 +1,12 @@
+beer-die-sb github project
+Author: John Grady Pace Cole
+
+Qt Beer Die Scoreboard
+
+This is a Qt project intended to be deployed as a BeerDie scoreboard, possibly on a Raspberry PI (TBD).
+
+Some installs:
+Qt -> http://www.wikihow.com/Install-Qt-SDK-on-Ubuntu-Linux
+
+
+
