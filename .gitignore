@@ -7,3 +7,4 @@ ui_*
 .project
 .cproject
 beer-die-sb
+Makefile
