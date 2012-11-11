@@ -1,3 +1,9 @@
 *.o
 simple/*
 *~
+moc_*
+ui_*
+*.swp
+.project
+.cproject
+beer-die-sb
