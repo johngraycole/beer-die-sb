@@ -1,31 +1,30 @@
 /*
- * ScoreForm.h
+ * DrinkForm.h
  *
  *  Created on: Nov 11, 2012
  *      Author: gray
  */
 
-#ifndef SCOREFORM_H_
-#define SCOREFORM_H_
+#ifndef DRINKFORM_H_
+#define DRINKFORM_H_
 
 #include <boost/thread/mutex.hpp>
-#include "ui_ScoreForm.h"
+#include "ui_DrinkForm.h"
 
-
-class ScoreForm : public QWidget, private Ui::ScoreFormWid
+class DrinkForm : public QWidget, private Ui::DrinkFormWid
 {
     Q_OBJECT
 
 public:
-    ScoreForm(QWidget *parent = 0);
+    DrinkForm(QWidget *parent = 0);
 
-    void SetScore(int score);
+    void SetDrinkScore(int drink_score);
 
 protected:
     virtual void paintEvent(QPaintEvent *e);
 
 private:
-	int _score;
+	int _drink_score;
 	boost::mutex _mutex;
 };
 

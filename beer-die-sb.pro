@@ -9,6 +9,11 @@ INCLUDEPATH += .
 LIBS += -lboost_date_time -lboost_thread
 
 # Input
-HEADERS += ScoreForm.h
-FORMS += ScoreForm.ui
-SOURCES += main.cpp ScoreForm.cpp Stoppable.cpp StdinGrabber.cpp
+
+HEADERS += ScoreForm.h DrinkForm.h Constants.h
+
+FORMS += ScoreForm.ui DrinkForm.ui
+
+SOURCES += main.cpp
+SOURCES += ScoreForm.cpp DrinkForm.cpp
+SOURCES += Stoppable.cpp StdinGrabber.cpp

@@ -8,22 +8,22 @@
 #ifndef STDINGRABBER_H_
 #define STDINGRABBER_H_
 
-#include <boost/thread/thread.hpp>
-#include "Stoppable.h"
+#include <boost/shared_ptr.hpp>
 
-#include <string>
-#include <iostream>
-using namespace std;
+#include "Stoppable.h"
+#include "DrinkForm.h"
 
 class StdinGrabber : public Stoppable {
 public:
-	StdinGrabber();
+	StdinGrabber(boost::shared_ptr<DrinkForm> df);
 	~StdinGrabber();
 
 	void Start();
 
 private:
 	static void GrabThread(void *arg);
+
+	boost::shared_ptr<DrinkForm> _df;
 };
 
 

@@ -1,23 +1,27 @@
-/*
- * ScoreForm.cpp
- *
- *  Created on: Nov 11, 2012
- *      Author: gray
- */
-
 #include "ScoreForm.h"
 
+#include <QPainter>
 
-ScoreForm::ScoreForm(QWidget *parent) : QWidget(parent) {
-	setupUi(this); // this sets up GUI
+using namespace boost;
+
+ScoreForm::ScoreForm(QWidget *parent) :
+QWidget(parent),
+_mutex()
+{
+	setupUi(this);
 	_score = 0;
-	repaint();
+}
+
+void ScoreForm::SetScore(int score) {
+	_mutex.lock();
+	_score = score;
+	_mutex.unlock();
+	QMetaObject::invokeMethod(this, "repaint", Qt::QueuedConnection);
 }
 
 
 void ScoreForm::paintEvent(QPaintEvent *e) {
-	cout << "ScoreForm paint()" << endl;
-
+	_mutex.lock();
 	QPainter p(this);
 	p.setPen(QPen(Qt::black, 3));
 
@@ -29,7 +33,8 @@ void ScoreForm::paintEvent(QPaintEvent *e) {
 	p.setFont(font);
 	p.drawText (11, 31, width()-21, height()-41,
 			Qt::AlignHCenter | Qt::AlignVCenter,
-			"0" );
+			QString::number(_score) );
+	_mutex.unlock();
 }
 
 

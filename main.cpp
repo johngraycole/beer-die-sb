@@ -1,19 +1,23 @@
+#include <boost/shared_ptr.hpp>
+
 #include <QApplication>
 #include <QTextEdit>
 
-#include "ScoreForm.h"
+#include "DrinkForm.h"
 #include "StdinGrabber.h"
+
+using namespace boost;
 
 int main(int argv, char **args)
 {
 	QApplication app(argv, args);
 
-	StdinGrabber grabber;
-	grabber.Start();
+	shared_ptr<DrinkForm> score( new DrinkForm() );
+	shared_ptr<StdinGrabber> grabber( new StdinGrabber(score) );
 
-	ScoreForm score;
-	score.show();
+	grabber->Start();
 
+	score->show();
 	return app.exec();
 }
 
