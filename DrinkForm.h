@@ -16,15 +16,19 @@ class DrinkForm : public QWidget, private Ui::DrinkFormWid
     Q_OBJECT
 
 public:
-    DrinkForm(QWidget *parent = 0);
+    DrinkForm(bool glassOnLeft, QWidget *parent = 0);
 
     void SetDrinkScore(int drink_score);
+    void SetOnDrink(int on_drink);
 
 protected:
     virtual void paintEvent(QPaintEvent *e);
 
 private:
-	int _drink_score;
+    QPoint findPointAlongLine( QPoint &start, QPoint &end, double per );
+
+    bool _glass_on_left;
+	int _drink_score, _on_drink;
 	boost::mutex _mutex;
 };
 
