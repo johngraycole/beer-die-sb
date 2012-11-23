@@ -13,7 +13,7 @@ int main(int argv, char **args)
 	QApplication app(argv, args);
 
 	shared_ptr<DrinkForm> score( new DrinkForm(false) );
-	shared_ptr<StdinGrabber> grabber( new StdinGrabber(score) );
+	shared_ptr<StdinGrabber> grabber( new StdinGrabber() );
 
 	grabber->Start();
 

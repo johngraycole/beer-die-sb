@@ -11,19 +11,24 @@
 #include <boost/shared_ptr.hpp>
 
 #include "Stoppable.h"
-#include "DrinkForm.h"
+#include "EventCreator.h"
+#include "GameUpdateListener.h"
 
-class StdinGrabber : public Stoppable {
+class StdinGrabber :
+	public Stoppable,
+	public EventCreator<GameUpdateListener, GameUpdate>
+{
 public:
-	StdinGrabber(boost::shared_ptr<DrinkForm> df);
+	StdinGrabber();
 	~StdinGrabber();
 
 	void Start();
 
+protected:
+	virtual void notify( boost::shared_ptr<GameUpdateListener> l, const GameUpdate &update );
+
 private:
 	static void GrabThread(void *arg);
-
-	boost::shared_ptr<DrinkForm> _df;
 };
 
 
