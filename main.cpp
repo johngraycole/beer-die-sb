@@ -18,6 +18,7 @@ int main(int argv, char **args)
 	shared_ptr<GameBoard> gameboard( new GameBoard() );
 	shared_ptr<StdinGrabber> grabber( new StdinGrabber() );
 
+	grabber->AddListener(gameboard);
 	grabber->Start();
 
 	gameboard->show();

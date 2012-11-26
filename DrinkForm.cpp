@@ -3,11 +3,6 @@
 #include <QPainter>
 #include "Constants.h"
 
-#define FULL_DRINK			5
-#define EMPTY_DRINK			0
-
-#define MAX_ON_DRINK		5
-#define MIN_ON_DRINK		0
 
 #define PEN_WIDTH			3
 
