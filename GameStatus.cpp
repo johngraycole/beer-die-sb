@@ -29,18 +29,15 @@ GameStatus GameStatus::update(GameUpdate update) const {
 		break;
 	case GU_PLAYER1_DRINK:
 		gs._p1drink--;
-		if (gs._p1drink < EMPTY_DRINK) {
+		gs._p1ondrink = MAX_ON_DRINK;
+		if (gs._p1drink < EMPTY_DRINK)
 			gs._p1drink = FULL_DRINK;
-			gs._p1ondrink = MAX_ON_DRINK;
-		}
 		break;
 	case GU_PLAYER1_PRONATE:
 	case GU_PLAYER1_ON_DRINK:
-		if (gs._p1ondrink > MIN_ON_DRINK) {
-			gs._p1ondrink--;
-			if (gs._p1ondrink == MIN_ON_DRINK)
-				gs = gs.update(GU_PLAYER1_DRINK);
-		}
+		gs._p1ondrink--;
+		if (gs._p1ondrink <= MIN_ON_DRINK)
+			gs = gs.update(GU_PLAYER1_DRINK);
 		break;
 	case GU_PLAYER1_SPLASH :
 		if (gs._p1drink != EMPTY_DRINK)
@@ -49,22 +46,19 @@ GameStatus GameStatus::update(GameUpdate update) const {
 		break;
 
 	case GU_PLAYER2_SCORE:
-		gs._p2score++;
-		break;
+			gs._p2score++;
+			break;
 	case GU_PLAYER2_DRINK:
 		gs._p2drink--;
-		if (gs._p2drink < EMPTY_DRINK) {
+		gs._p2ondrink = MAX_ON_DRINK;
+		if (gs._p2drink < EMPTY_DRINK)
 			gs._p2drink = FULL_DRINK;
-			gs._p2ondrink = MAX_ON_DRINK;
-		}
 		break;
 	case GU_PLAYER2_PRONATE:
 	case GU_PLAYER2_ON_DRINK:
-		if (gs._p2ondrink > MIN_ON_DRINK) {
-			gs._p2ondrink--;
-			if (gs._p2ondrink == MIN_ON_DRINK)
-				gs = gs.update(GU_PLAYER2_DRINK);
-		}
+		gs._p2ondrink--;
+		if (gs._p2ondrink <= MIN_ON_DRINK)
+			gs = gs.update(GU_PLAYER2_DRINK);
 		break;
 	case GU_PLAYER2_SPLASH :
 		if (gs._p2drink != EMPTY_DRINK)
