@@ -22,6 +22,8 @@
 #define MAX_ON_DRINK		3
 #define MIN_ON_DRINK		0
 
-#define MAX_UNDOS			5
+#define MAX_UNDOS			10
+
+#define SPLASH_SCREEN_TIMEOUT_MS	3000
 
 #endif /* CONSTANTS_H_ */

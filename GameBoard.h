@@ -12,6 +12,8 @@
 
 #include <vector>
 
+#include <QHBoxLayout>
+
 #include "LogoForm.h"
 #include "DrinkForm.h"
 #include "ScoreForm.h"
@@ -27,10 +29,16 @@ public:
 
 	virtual void OnGameUpdate(GameUpdate update);
 
+protected slots:
+	void gameboardtimeout();
+	void setGameLayout(bool chug_fill_chug);
+
 private:
 	void updateWidgets();
 
-    LogoForm *_logo;
+	GameUpdate _timeoutUpdate;
+
+    LogoForm *_logo, *_logo2;
     DrinkForm *_p1_drink, *_p2_drink;
     ScoreForm *_p1_score, *_p2_score;
     boost::mutex _mutex;
