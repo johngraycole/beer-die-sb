@@ -10,9 +10,9 @@
 
 #include <boost/thread/mutex.hpp>
 
-#include <vector>
-
 #include <QHBoxLayout>
+
+#include <vector>
 
 #include "LogoForm.h"
 #include "DrinkForm.h"
@@ -34,6 +34,8 @@ protected slots:
 	void setGameLayout(bool chug_fill_chug);
 
 private:
+	void removeWidgets(QLayout *lay);
+	void createWidgets(QLayout *lay);
 	void updateWidgets();
 
 	GameUpdate _timeoutUpdate;

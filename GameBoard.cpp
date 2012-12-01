@@ -10,9 +10,6 @@
 #include "GameBoard.h"
 #include "Constants.h"
 
-#include <iostream>
-using namespace std;
-
 GameBoard::GameBoard(QWidget *parent) :
 QWidget(parent),
 _mutex(),
@@ -20,22 +17,7 @@ _old_status(),
 _currStatus()
 {
 	QHBoxLayout *hbox = new QHBoxLayout(parent);
-
-	_p1_score = new ScoreForm(parent);
-	hbox->addWidget(_p1_score);
-	_p1_drink = new DrinkForm(true, parent);
-	hbox->addWidget(_p1_drink);
-
-	std::string image("logo.png");
-	_logo = new LogoForm(image, parent);
-	_logo2 = new LogoForm(image, parent);
-	hbox->addWidget(_logo);
-
-	_p2_drink = new DrinkForm(false, parent);
-	hbox->addWidget(_p2_drink);
-	_p2_score = new ScoreForm(parent);
-	hbox->addWidget(_p2_score);
-
+	createWidgets(hbox);
 	setLayout(hbox);
 	updateWidgets();
 }
@@ -72,6 +54,32 @@ void GameBoard::OnGameUpdate(GameUpdate update) {
 	_mutex.unlock();
 }
 
+void GameBoard::createWidgets(QLayout *layout) {
+	_p1_score = new ScoreForm(this);
+	layout->addWidget(_p1_score);
+	_p1_drink = new DrinkForm(true, this);
+	layout->addWidget(_p1_drink);
+
+	std::string image("logo.png");
+	_logo = new LogoForm(image, this);
+	layout->addWidget(_logo);
+
+	_p2_drink = new DrinkForm(false, this);
+	layout->addWidget(_p2_drink);
+	_p2_score = new ScoreForm(this);
+	layout->addWidget(_p2_score);
+}
+
+void GameBoard::removeWidgets(QLayout *lay) {
+	QLayoutItem* item;
+	while ((item = lay->takeAt(0)) != NULL) {
+		QWidget *wid;
+		if ((wid = item->widget()) != NULL)
+			delete wid;
+		delete item;
+	}
+}
+
 void GameBoard::updateWidgets() {
 	_p1_score->SetScore( _currStatus.P1Score() );
 	_p1_drink->SetDrinkScore( _currStatus.P1Drink() );
@@ -82,24 +90,17 @@ void GameBoard::updateWidgets() {
 }
 
 void GameBoard::setGameLayout(bool chug_fill_chug) {
-	QLayout *lay = layout();
-	while (lay->count() > 0)
-		lay->takeAt(0);
+	removeWidgets(layout());
 
-	lay->addWidget(_logo2);
+	std::string image("logo.png");
+	_logo2 = new LogoForm(image, this);
+	layout()->addWidget(_logo2);
 	QTimer::singleShot(SPLASH_SCREEN_TIMEOUT_MS, this, SLOT(gameboardtimeout()));
 }
 
 void GameBoard::gameboardtimeout() {
-	QLayout *lay = layout();
-	while (lay->count() > 0)
-		lay->takeAt(0);
-
-	lay->addWidget(_p1_score);
-	lay->addWidget(_p1_drink);
-	lay->addWidget(_logo);
-	lay->addWidget(_p2_drink);
-	lay->addWidget(_p2_score);
+	removeWidgets(layout());
+	createWidgets(layout());
 
 	GameStatus gs( _currStatus.update(_timeoutUpdate) );
 	if (gs != GameStatus::INVALID_STATUS) {
