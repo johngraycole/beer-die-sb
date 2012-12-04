@@ -21,12 +21,11 @@ public:
     void SetDrinkScore(int drink_score);
     void SetOnDrink(int on_drink);
 
+    static QPoint findPointAlongLine( QPoint &start, QPoint &end, double per );
 protected:
     virtual void paintEvent(QPaintEvent *e);
 
 private:
-    QPoint findPointAlongLine( QPoint &start, QPoint &end, double per );
-
     bool _glass_on_left;
 	int _drink_score, _on_drink;
 	boost::mutex _mutex;

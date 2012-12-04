@@ -9,6 +9,7 @@
 
 #include "GameBoard.h"
 #include "Constants.h"
+#include "ChugFillForm.h"
 
 GameBoard::GameBoard(QWidget *parent) :
 QWidget(parent),
@@ -37,7 +38,7 @@ void GameBoard::OnGameUpdate(GameUpdate update) {
 		QMetaObject::invokeMethod(this,
 								  "setGameLayout",
 								  Qt::QueuedConnection,
-								  Q_ARG(bool, (_currStatus.P1Drink() == EMPTY_DRINK)));
+								  Q_ARG(bool, (_currStatus.P1Drink() != EMPTY_DRINK)));
 		return;
 	default:
 		GameStatus gs( _currStatus.update(update) );
@@ -61,8 +62,8 @@ void GameBoard::createWidgets(QLayout *layout) {
 	layout->addWidget(_p1_drink);
 
 	std::string image("logo.png");
-	_logo = new LogoForm(image, this);
-	layout->addWidget(_logo);
+	LogoForm *logo = new LogoForm(image, this);
+	layout->addWidget(logo);
 
 	_p2_drink = new DrinkForm(false, this);
 	layout->addWidget(_p2_drink);
@@ -92,9 +93,16 @@ void GameBoard::updateWidgets() {
 void GameBoard::setGameLayout(bool chug_fill_chug) {
 	removeWidgets(layout());
 
-	std::string image("logo.png");
-	_logo2 = new LogoForm(image, this);
-	layout()->addWidget(_logo2);
+	if (chug_fill_chug) {
+		layout()->addWidget(new ChugFillForm(CHUG, this));
+		layout()->addWidget(new ChugFillForm(FILL, this));
+		layout()->addWidget(new ChugFillForm(CHUG, this));
+	} else {
+		layout()->addWidget(new ChugFillForm(FILL, this));
+		layout()->addWidget(new ChugFillForm(CHUG, this));
+		layout()->addWidget(new ChugFillForm(FILL, this));
+	}
+
 	QTimer::singleShot(SPLASH_SCREEN_TIMEOUT_MS, this, SLOT(gameboardtimeout()));
 }
 

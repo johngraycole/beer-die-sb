@@ -40,7 +40,6 @@ private:
 
 	GameUpdate _timeoutUpdate;
 
-    LogoForm *_logo, *_logo2;
     DrinkForm *_p1_drink, *_p2_drink;
     ScoreForm *_p1_score, *_p2_score;
     boost::mutex _mutex;
