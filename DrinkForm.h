@@ -10,8 +10,9 @@
 
 #include <boost/thread/mutex.hpp>
 #include "ui_DrinkForm.h"
+#include "CupDrawer.h"
 
-class DrinkForm : public QWidget, private Ui::DrinkFormWid
+class DrinkForm : public QWidget, public CupDrawer, private Ui::DrinkFormWid
 {
     Q_OBJECT
 
@@ -21,7 +22,6 @@ public:
     void SetDrinkScore(int drink_score);
     void SetOnDrink(int on_drink);
 
-    static QPoint findPointAlongLine( QPoint &start, QPoint &end, double per );
 protected:
     virtual void paintEvent(QPaintEvent *e);
 

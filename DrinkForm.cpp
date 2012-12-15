@@ -3,13 +3,11 @@
 #include <QPainter>
 #include "Constants.h"
 
-
-#define PEN_WIDTH			3
-
 using namespace boost;
 
 DrinkForm::DrinkForm(bool glassOnLeft, QWidget *parent) :
 QWidget(parent),
+CupDrawer(),
 _mutex()
 {
 	setupUi(this);
@@ -39,7 +37,6 @@ void DrinkForm::SetOnDrink(int on_drink) {
 
 void DrinkForm::paintEvent(QPaintEvent *e) {
 	QPainter p(this);
-	p.setPen(QPen(Qt::black, PEN_WIDTH));
 
 	int absTop = 30, absLeft = 10;
 	int absHeight = height()-40, absWidth = width()-20;
@@ -49,9 +46,6 @@ void DrinkForm::paintEvent(QPaintEvent *e) {
 
 	double PER_BUFF = .1;
 	double ON_DRINK_PER_WIDTH = .1;
-	double PER_TILT_IN = .2;
-	double PER_ELL_HALF_HEIGHT = .04;
-	double MAX_BEER_PER_FULL = .97;
 
 	int glassLeft = absLeft + PER_BUFF*absWidth;
 	if (!_glass_on_left)
@@ -59,15 +53,10 @@ void DrinkForm::paintEvent(QPaintEvent *e) {
 	int glassTop = absTop + PER_BUFF*absHeight;
 	int glassWidth = (1 - 2*PER_BUFF - ON_DRINK_PER_WIDTH)*absWidth;
 	int glassHeight = (1 - 2*PER_BUFF)*absHeight;
+	double beerPer = (_drink_score-EMPTY_DRINK) / (double)(FULL_DRINK-EMPTY_DRINK);
 
-	int ellLeft = glassLeft + PER_TILT_IN*glassWidth;
-	int ellTop = (glassTop+glassHeight) - PER_ELL_HALF_HEIGHT*glassHeight;
-	int ellWidth = (1-2*PER_TILT_IN)*glassWidth;
-	int ellHeight = 2*PER_ELL_HALF_HEIGHT*glassHeight;
-
-	p.drawEllipse( ellLeft, ellTop, ellWidth, ellHeight );
-	p.drawLine( glassLeft, glassTop, ellLeft, glassTop+glassHeight );
-	p.drawLine( glassLeft+glassWidth, glassTop, ellLeft+ellWidth, glassTop+glassHeight );
+	drawCup(p, glassTop, glassLeft, glassWidth, glassHeight, beerPer);
+	p.setPen(QPen(Qt::black, PEN_WIDTH));
 
 	// on drink
 	int odLeft = absLeft + PER_BUFF*absWidth;
@@ -87,56 +76,5 @@ void DrinkForm::paintEvent(QPaintEvent *e) {
 	p.drawText (odLeft, glassTop+glassHeight, odWidth, PER_BUFF*absHeight,
 			Qt::AlignHCenter | Qt::AlignVCenter,
 			QString::number(_on_drink) );
-
-	// here comes the drink
-	if (_drink_score > EMPTY_DRINK) {
-		p.setPen( Qt::NoPen );
-		p.setBrush( QBrush(QColor(255, 153, 51)) );
-
-		p.drawEllipse( ellLeft, ellTop, ellWidth, ellHeight );
-
-		QPoint beerBL(ellLeft, glassTop+glassHeight);
-		QPoint beerBR(ellLeft+ellWidth, glassTop+glassHeight);
-
-		QPoint glassTL( glassLeft, glassTop );
-		QPoint glassTR( glassLeft+glassWidth, glassTop );
-
-		double beerPer = (_drink_score-EMPTY_DRINK) / (double)(FULL_DRINK-EMPTY_DRINK);
-		beerPer *= MAX_BEER_PER_FULL;
-
-		QPoint tl = findPointAlongLine(beerBL, glassTL, beerPer);
-		QPoint tr = findPointAlongLine(beerBR, glassTR, beerPer);
-
-		QPolygon beer;
-		beer << beerBL << beerBR << tr << tl;
-		p.drawPolygon(beer);
-
-		p.drawEllipse( tl.x(), tl.y()-PER_ELL_HALF_HEIGHT*glassHeight,
-				tr.x()-tl.x(), ellHeight );
-	}
-
-	p.setBrush( Qt::NoBrush );
-	p.setPen(QPen(Qt::black, PEN_WIDTH));
-	p.drawEllipse( glassLeft, glassTop-PER_ELL_HALF_HEIGHT*glassHeight,
-			glassWidth, 2*PER_ELL_HALF_HEIGHT*glassHeight );
-
 }
-
-
-QPoint DrinkForm::findPointAlongLine( QPoint &start, QPoint &end, double per ) {
-	QPoint pt;
-
-	int diffx = end.x()-start.x();
-	int diffy = end.y()-start.y();
-
-	pt.setX( start.x() + diffx*per );
-	pt.setY( start.y() + diffy*per );
-
-	return pt;
-}
-
-
-
-
-
 

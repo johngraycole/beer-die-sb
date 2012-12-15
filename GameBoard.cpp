@@ -10,6 +10,7 @@
 #include "GameBoard.h"
 #include "Constants.h"
 #include "ChugFillForm.h"
+#include "TextForm.h"
 
 GameBoard::GameBoard(QWidget *parent) :
 QWidget(parent),
@@ -33,12 +34,24 @@ void GameBoard::OnGameUpdate(GameUpdate update) {
 			_old_status.pop_back();
 		}
 		break;
+	case GU_PLAYER1_PRONATE:
+	case GU_PLAYER2_PRONATE:
+		_timeoutUpdate = update;
+		QMetaObject::invokeMethod(this, "setPronateLayout", Qt::QueuedConnection);
+		return;
 	case GU_PLAYER1_SPLASH:
 		_timeoutUpdate = update;
 		QMetaObject::invokeMethod(this,
-								  "setGameLayout",
+								  "setChugFillLayout",
 								  Qt::QueuedConnection,
 								  Q_ARG(bool, (_currStatus.P1Drink() != EMPTY_DRINK)));
+		return;
+	case GU_PLAYER2_SPLASH:
+		_timeoutUpdate = update;
+		QMetaObject::invokeMethod(this,
+								  "setChugFillLayout",
+								  Qt::QueuedConnection,
+								  Q_ARG(bool, (_currStatus.P2Drink() != EMPTY_DRINK)));
 		return;
 	default:
 		GameStatus gs( _currStatus.update(update) );
@@ -90,7 +103,7 @@ void GameBoard::updateWidgets() {
 	_p2_drink->SetOnDrink( _currStatus.P2OnDrink() );
 }
 
-void GameBoard::setGameLayout(bool chug_fill_chug) {
+void GameBoard::setChugFillLayout(bool chug_fill_chug) {
 	removeWidgets(layout());
 
 	if (chug_fill_chug) {
@@ -102,6 +115,14 @@ void GameBoard::setGameLayout(bool chug_fill_chug) {
 		layout()->addWidget(new ChugFillForm(CHUG, this));
 		layout()->addWidget(new ChugFillForm(FILL, this));
 	}
+
+	QTimer::singleShot(SPLASH_SCREEN_TIMEOUT_MS, this, SLOT(gameboardtimeout()));
+}
+
+void GameBoard::setPronateLayout() {
+	removeWidgets(layout());
+
+	// TODO: fill will pronate stuff
 
 	QTimer::singleShot(SPLASH_SCREEN_TIMEOUT_MS, this, SLOT(gameboardtimeout()));
 }

@@ -15,6 +15,7 @@
 #define MAX(x,y)      (x>y ? x : y)
 #endif
 
+#define PEN_WIDTH			3
 
 #define FULL_DRINK			5
 #define EMPTY_DRINK			0
@@ -24,6 +25,6 @@
 
 #define MAX_UNDOS			10
 
-#define SPLASH_SCREEN_TIMEOUT_MS	3000
+#define SPLASH_SCREEN_TIMEOUT_MS	10000
 
 #endif /* CONSTANTS_H_ */

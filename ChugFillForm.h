@@ -9,6 +9,7 @@
 #define CHUGFILLFORM_H_
 
 #include "ui_ChugFillForm.h"
+#include "CupDrawer.h"
 
 typedef enum chug_fill_e {
 	CHUG,
@@ -16,7 +17,7 @@ typedef enum chug_fill_e {
 	UNKNOWN
 } ChugFill;
 
-class ChugFillForm : public QWidget, private Ui::ChugFillFormWid
+class ChugFillForm : public QWidget, public CupDrawer, private Ui::ChugFillFormWid
 {
     Q_OBJECT
 

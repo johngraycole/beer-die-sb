@@ -31,7 +31,8 @@ public:
 
 protected slots:
 	void gameboardtimeout();
-	void setGameLayout(bool chug_fill_chug);
+	void setChugFillLayout(bool chug_fill_chug);
+	void setPronateLayout();
 
 private:
 	void removeWidgets(QLayout *lay);
