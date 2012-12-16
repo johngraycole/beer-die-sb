@@ -41,16 +41,12 @@ void GameBoard::OnGameUpdate(GameUpdate update) {
 		return;
 	case GU_PLAYER1_SPLASH:
 		_timeoutUpdate = update;
-		QMetaObject::invokeMethod(this,
-								  "setChugFillLayout",
-								  Qt::QueuedConnection,
+		QMetaObject::invokeMethod(this, "setChugFillLayout", Qt::QueuedConnection,
 								  Q_ARG(bool, (_currStatus.P1Drink() != EMPTY_DRINK)));
 		return;
 	case GU_PLAYER2_SPLASH:
 		_timeoutUpdate = update;
-		QMetaObject::invokeMethod(this,
-								  "setChugFillLayout",
-								  Qt::QueuedConnection,
+		QMetaObject::invokeMethod(this, "setChugFillLayout", Qt::QueuedConnection,
 								  Q_ARG(bool, (_currStatus.P2Drink() != EMPTY_DRINK)));
 		return;
 	default:
@@ -122,7 +118,10 @@ void GameBoard::setChugFillLayout(bool chug_fill_chug) {
 void GameBoard::setPronateLayout() {
 	removeWidgets(layout());
 
-	// TODO: fill will pronate stuff
+	layout()->addWidget( new TextForm("C'MON", this) );
+	std::string image("zack.jpg");
+	layout()->addWidget( new LogoForm(image, this) );
+	layout()->addWidget( new TextForm("ZACK", this) );
 
 	QTimer::singleShot(SPLASH_SCREEN_TIMEOUT_MS, this, SLOT(gameboardtimeout()));
 }
